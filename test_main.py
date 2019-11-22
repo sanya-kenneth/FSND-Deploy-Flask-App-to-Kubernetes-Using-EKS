@@ -3,7 +3,7 @@ Tests for jwt flask app.
 '''
 import os
 import json
-import pytest
+import unittest
 
 import main
 
@@ -12,29 +12,28 @@ TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjEzMDY3OTAsIm5iZiI6MT
 EMAIL = 'wolf@thedoor.com'
 PASSWORD = 'huff-puff'
 
-@pytest.fixture
-def client():
-    os.environ['JWT_SECRET'] = SECRET
-    main.APP.config['TESTING'] = True
-    client = main.APP.test_client()
-
-    yield client
-
+# @pytest.fixture
+class ProjectTesCase(unittest.TestCase):
+    def setUp(self):
+        os.environ['JWT_SECRET'] = SECRET
+        main.APP.config['TESTING'] = True
+        self.client = main.APP.test_client()
 
 
-def test_health(client):
-    response = client.get('/')
-    assert response.status_code == 200
-    assert response.json == 'Healthy'
+
+    def test_health(self):
+        response = self.client.get('/')
+        assert response.status_code == 200
+        assert response.json == 'Healthy'
 
 
-def test_auth(client):
-    body = {'email': EMAIL,
-            'password': PASSWORD}
-    response = client.post('/auth', 
-                           data=json.dumps(body),
-                           content_type='application/json')
+    def test_auth(self):
+        body = {'email': EMAIL,
+                'password': PASSWORD}
+        response = self.client.post('/auth', 
+                            data=json.dumps(body),
+                            content_type='application/json')
 
-    assert response.status_code == 200
-    token = response.json['token']
-    assert token is not None
+        assert response.status_code == 200
+        token = response.json['token']
+        assert token is not None

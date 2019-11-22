@@ -1,0 +1,4 @@
+JWT_SECRET=fsnddockerproject
+LOG_LEVEL=DEBUG
+ACCOUNT_ID=745189714332
+TRUST="{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Allow\", \"Principal\": { \"AWS\": \"arn:aws:iam::${ACCOUNT_ID}:root\" }, \"Action\": \"sts:AssumeRole\" } ] }"
